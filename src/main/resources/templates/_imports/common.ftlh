@@ -36,13 +36,13 @@
 
 [#macro pager]
     <div class="pager">
-        [@pagerLink page=0 active=false text="⇤" /]
+        [@pagerLink page=0 active=osoby.first text="⇤" /]
         [@pagerLink page=osoby.number - 1 active=osoby.first text="←" /]
         [#list (0..!osoby.totalPages) as pageNumber]
             [@pagerLink page=pageNumber active=pageNumber==osoby.number text=pageNumber + 1 /]
         [/#list]
         [@pagerLink page=osoby.number + 1 active=osoby.last text="→" /]
-        [@pagerLink page=osoby.totalPages - 1 active=false text="⇥" /]
+        [@pagerLink page=osoby.totalPages - 1 active=osoby.last text="⇥" /]
     </div>
 [/#macro]
 

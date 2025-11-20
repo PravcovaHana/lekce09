@@ -30,7 +30,7 @@ public class OsobaController {
     }
 
     @GetMapping("/")
-    public ModelAndView zakladniSeznam(@PageableDefault(sort = {"prijmeni", "jmeno"}) Pageable pageable) {
+    public ModelAndView zakladniSeznam(@PageableDefault(sort = {"prijmeni", "jmeno"}, size = 20) Pageable pageable) {
         return new ModelAndView("osoby")
                 .addObject("osoby", service.seznamOsob(pageable));
     }
@@ -49,27 +49,24 @@ public class OsobaController {
     }
 
     @GetMapping("/prijmeni")
-    public ModelAndView prijmeni(@ModelAttribute("prijmeni") @Valid @NotBlank String prijmeni, @PageableDefault() Pageable pageable) {
+    public ModelAndView prijmeni(@ModelAttribute("prijmeni") @Valid @NotBlank String prijmeni, @PageableDefault(sort = {"prijmeni", "jmeno"}) Pageable pageable) {
         return new ModelAndView("osoby")
                 .addObject("formInclude", "prijmeni.ftlh")
-                //TODO vytvořit a použít správnou metodu pro načtení dat
-                .addObject("osoby", service.seznamOsob(pageable));
+                .addObject("osoby", service.seznamOsobDlePrijmeni(prijmeni, pageable));
     }
 
     @GetMapping("/obec")
     public ModelAndView obec(@ModelAttribute("obec") @Valid @NotBlank String obec, @PageableDefault(sort = {"prijmeni", "jmeno"}) Pageable pageable) {
         return new ModelAndView("osoby-s-adresou")
                 .addObject("formInclude", "obec.ftlh")
-                //TODO vytvořit a použít správnou metodu pro načtení dat
-                .addObject("osoby", service.seznamOsob(pageable));
+                .addObject("osoby", service.seznamOsobDleObce(obec, pageable));
     }
 
     @GetMapping("/minimalni-vek")
     public ModelAndView minimalniVek(@ModelAttribute("vek") int vek, @PageableDefault(sort = {"prijmeni", "jmeno"}) Pageable pageable) {
         return new ModelAndView("osoby")
                 .addObject("formInclude", "minimalni-vek.ftlh")
-                //TODO vytvořit a použít správnou metodu pro načtení dat
-                .addObject("osoby", service.seznamOsob(pageable));
+                .addObject("osoby", service.seznamOsobDleVeku(vek, pageable));
     }
 
     @ModelAttribute("currentYear")

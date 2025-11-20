@@ -1,6 +1,8 @@
 package cz.czechitas.java2webapps.lekce9.repository;
 
 import cz.czechitas.java2webapps.lekce9.entity.Osoba;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,11 +40,14 @@ public interface OsobaRepository extends JpaRepository<Osoba, Long> {
     /**
      * Vyhledá všechny osoby, jejichž příjmení začíná na uvedený text.
      */
-    Page<Osoba> findByPrijmeniStartingWithIgnoreCase(String prijmeni, Pageable pageable);
+    Page<Osoba> findByPrijmeniStartingWithIgnoreCaseOrderByPrijmeniAscJmenoAsc(String prijmeni, Pageable pageable);
 
     /**
      * Vyhledá všechny osoby, které se narodily v rozmezí zadaných let.
      */
     @Query("SELECT o FROM Osoba o WHERE YEAR(o.datumNarozeni) BETWEEN :pocatecniRok AND :koncovyRok")
     Page<Osoba> findByRok(@Param("pocatecniRok") int pocatecniRok, @Param("koncovyRok") int koncovyRok, Pageable pageable);
+
+
+
 }

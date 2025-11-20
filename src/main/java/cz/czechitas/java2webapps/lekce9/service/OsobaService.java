@@ -3,10 +3,14 @@ package cz.czechitas.java2webapps.lekce9.service;
 import cz.czechitas.java2webapps.lekce9.entity.Osoba;
 import cz.czechitas.java2webapps.lekce9.form.RokNarozeniForm;
 import cz.czechitas.java2webapps.lekce9.repository.OsobaRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 /**
  * Služba pro práci s osobami a adresami.
@@ -32,5 +36,21 @@ public class OsobaService {
      */
     public Page<Osoba> seznamDleRokuNarozeni(RokNarozeniForm form, Pageable pageable) {
         return osobaRepository.findByRok(form.getOd(), form.getDo(), pageable);
+    }
+
+    /**
+     * Vrací stránkovaný seznam osob, jejich prijmeni zacina na zadany text seřazených podle příjmení a jména.
+     */
+    public Object seznamOsobDlePrijmeni(String prijmeni, Pageable pageable) {
+        return osobaRepository.findByPrijmeniStartingWithIgnoreCaseOrderByPrijmeniAscJmenoAsc(prijmeni, pageable);
+    }
+
+    public Object seznamOsobDleObce(String obec, Pageable pageable) {
+        return osobaRepository.findOsobaByAdresa_Obec(obec, pageable);
+    }
+
+    public Object seznamOsobDleVeku(int vek, Pageable pageable) {
+        LocalDate datumNarozeni = LocalDate.now().minusYears(vek);
+        return osobaRepository.findByDatumNarozeniBefore(datumNarozeni, pageable);
     }
 }
